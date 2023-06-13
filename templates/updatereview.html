@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %} Update Review {% endblock title %}
+{% block body %}
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Update Review</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Update Review</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+
+
+
+
+<div class="col-md-6 container">
+    <h4 class="mb-4">Leave a review</h4>
+    <small>Your email address will not be published. Required fields are marked *</small>
+    <form action="/update_review/{{review.id}}" method="post">
+        {% csrf_token %}
+        <div class="d-flex my-3">
+            <p class="mb-0 mr-2">Your Rating * :</p>
+            <select name="stars" class="text-primary" required>
+                <option name="1" class="far fa-star" value="1">1</option>
+                <option name="2" class="far fa-star" value="2">2</option>
+                <option name="3" class="far fa-star" value="3">3</option>
+                <option name="4" class="far fa-star" value="4">4</option>
+                <option name="5" class="far fa-star" value="5">5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="message">Your Review *</label>
+            <textarea id="message" cols="30" rows="5" class="form-control" name="review"
+                required>{{ review.review }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="name">Your Name *</label>
+            <input type="text" class="form-control" id="name" name="reviewname" value="{{ review.name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Your Email *</label>
+            <input type="email" class="form-control" id="email" name="reviewemail" value="{{ review.email }}" required>
+        </div>
+        <div class="form-group mb-0">
+            <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+        </div>
+    </form>
+</div>
+{% endblock body %}

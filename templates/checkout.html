@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% block title %} Checkout {% endblock title %}
+{% block body %}
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Checkout</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Checkout</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Checkout Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8"> 
+            <p>If you are not a customer, click here to become <a href="profile">customer</a>.</p>       
+            <div class="col-sm-4 offset-sm-1">
+                <h4>Select Shipping Address</h4>
+                <hr>
+                <form id="shipping-form" action="/paymentdone">
+                    <input type="hidden" name="amount" value="{{ total_amount }}" />
+                    {% for add in address %}   
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>{{add.name}}</h5>
+                            <p>{{add.locality}} <br> {{add.city}}</p>
+                        </div>
+                    </div>
+                    <div class="form-check mt-2 mb-5">
+                        <input class="form-check-input" type="radio" name="custid" id="custadd{{forloop.counter}}" value="{{add.id}}">
+                        <label class="form-check-label fw-bold" for="custadd{{forloop.counter}}">
+                            Address: {{forloop.counter}}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="font-weight-medium mb-3">Products</h5>
+                        {% for item in cart_items %}
+                        <div class="d-flex justify-content-between">
+                            <p>{{item.product.productname}}</p>
+                            <p>${{item.totalcost|floatformat:2}}</p>
+                        </div>
+                        {% endfor %}
+                        <hr class="mt-0">
+                        <div class="d-flex justify-content-between mb-3 pt-1">
+                            <h6 class="font-weight-medium">Subtotal</h6>
+                            <h6 class="font-weight-medium">${{amount|floatformat:2}}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Shipping</h6>
+                            <h6 class="font-weight-medium">${{shipping_amount}}</h6>
+                        </div>
+                    </div>
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">${{total_amount|floatformat:2}}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="stripe" checked>
+                                <label class="custom-control-label"for="stripe">Pay with Credit Card (Stripe)</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="paypal">
+                                <label class="custom-control-label" for="paypal">Pay with PayPal</label>
+                            </div>
+                        </div>
+                        <div id="stripe-form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="card-holder-name" placeholder="Card Holder Name">
+                            </div>
+                            <div class="form-group">
+                                <div id="card-element" name="amount"></div>
+                            </div>
+                                <button type="submit" class="btn btn-block btn-primary mt-2 py-3" id="place-order-btn">Place Order</button>
+                        </div>
+                        <div id="paypal-form" class="d-none">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Pay with PayPal</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Checkout End -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+   // Initialize Stripe
+   var stripe = Stripe('pk_test_51MeyuWCUuz72zo9OTMgdIB0fqdYxoBHcyQNwAD4023r0wz7JJtkiWsLbfmJbH2OjvzeoLZM9VrMLw853cll433tQ006lGsi8xR');
+
+   // Create a Stripe card element
+   var elements = stripe.elements();
+   var cardElement = elements.create('card');
+
+   // Mount the card element on the page
+   cardElement.mount('#card-element');
+
+   // Handle the form submission
+   var form = document.getElementById('shipping-form');
+   form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      stripe.createToken(cardElement).then(function(result) {
+         if (result.error) {
+            // Inform the user if there was an error
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+         } else {
+            // Send the token to your server
+            var tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = 'stripeToken';
+            tokenInput.value = result.token.id;
+            form.appendChild(tokenInput);
+            form.submit();
+         }
+      });
+   });
+</script>
+
+
+<!-- <script>
+    // Initialize Stripe
+const stripe = Stripe('pk_test_51MeyuWCUuz72zo9OTMgdIB0fqdYxoBHcyQNwAD4023r0wz7JJtkiWsLbfmJbH2OjvzeoLZM9VrMLw853cll433tQ006lGsi8xR');
+const elements = stripe.elements();
+
+// Get the shipping form
+const shippingForm = document.getElementById('shipping-form');
+
+// Get the Stripe form and elements
+const stripeForm = document.getElementById('stripe-form');
+const cardElement = elements.create('card');
+
+// Mount the card element
+cardElement.mount('#card-element');
+
+// Show or hide the PayPal form based on the selected payment method
+const paypalForm = document.getElementById('paypal-form');
+const paymentRadios = document.getElementsByName('payment');
+paymentRadios.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        if (radio.id === 'paypal') {
+            stripeForm.classList.add('d-none');
+            paypalForm.classList.remove('d-none');
+        } else {
+            stripeForm.classList.remove('d-none');
+            paypalForm.classList.add('d-none');
+        }
+    });
+});
+
+// Handle form submission
+shippingForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Get the selected customer ID
+    const customerID = document.querySelector('input[name="custid"]:checked').value;
+
+    // Disable the submit button to prevent duplicate submissions
+    const placeOrderButton = document.getElementById('place-order-btn');
+    placeOrderButton.disabled = true;
+
+    // Collect the Stripe payment information and create a token
+    stripe.createToken(cardElement).then(function(result) {
+        if (result.error) {
+            // Display the error to the user
+            const errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+
+            // Re-enable the submit button
+            placeOrderButton.disabled = false;
+        } else {
+            // Send the customer ID and Stripe token to the server
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/payment/');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Redirect the user to the order confirmation page
+                    window.location.href = '/order-confirmation/';
+                } else {
+                    // Display the error to the user
+                    const errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = xhr.response;
+
+                    // Re-enable the submit button
+                    placeOrderButton.disabled = false;
+                }
+            };
+            xhr.send(JSON.stringify({
+                customerID: customerID,
+                token: result.token.id,
+            }));
+        }
+    });
+});
+
+</script> -->
+
+
+{% endblock body %}

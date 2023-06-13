@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %} Customer {% endblock title %}
+{% block body %}
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Checkout</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Checkout</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Checkout Start -->
+<div class="container pt-5 d-flex align-items-center justify-content-center">
+    <form action="/customer" method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label for="name">Your Name</label>
+          <input class="form-control" name="name" type="text" placeholder="John" id="name" required>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="email">E-mail</label>
+          <input class="form-control" type="email" placeholder="example@email.com" name="email" id="email" required>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="locality">Locality</label>
+          <input class="form-control" name="locality" type="text" placeholder="123 Street" id="locality" required>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="city">City</label>
+          <input class="form-control" type="text" placeholder="New York" name="city" id="city" required>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="state">State</label>
+          <input class="form-control" type="text" placeholder="New York" name="state" id="state" required>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="zipcode">ZIP Code</label>
+          <input class="form-control" type="text" placeholder="123" name="zipcode" id="zipcode" required>
+        </div>
+        <div class="col-md-12 form-group d-flex align-items-center justify-content-center">
+          <button class="btn btn-lg btn-primary font-weight-bold my-3 py-3" type="submit">Create Account</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Checkout End --> 
+
+
+{% endblock body %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

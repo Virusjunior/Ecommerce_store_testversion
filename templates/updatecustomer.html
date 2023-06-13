@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %} Update Customer {% endblock title %}
+{% block body %}
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Welcome {{user.username}}</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Profile</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid py-5">
+    <div class="row px-xl-5">
+        <div class="col">
+                <div class="tab-pane fade show active" id="tab-pane-1">
+                    <h4 class="mb-3">Update Customer</h4>
+                    <div class="container pt-5 d-flex align-items-center justify-content-center">
+                        <form action="/update_customer/{{customer.id}}/" method="post" >
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Your Name</label>
+                                    <input class="form-control" name="updatename" type="text" placeholder="John" value="{{customer.name}}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>E-mail</label>
+                                    <input class="form-control" type="text" placeholder="example@email.com" name="updateemail" value="{{customer.email}}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Locality</label>
+                                    <input class="form-control" name="updatelocality" type="text" placeholder="123 Street" value="{{customer.locality}}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>City</label>
+                                    <input class="form-control" type="text" placeholder="New York" name="updatecity" value="{{customer.city}}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>State</label>
+                                    <input class="form-control" type="text" placeholder="New York" name="updatestate" value="{{customer.state}}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>ZIP Code</label>
+                                    <input class="form-control" type="text" placeholder="123" name="updatezipcode" value="{{customer.zipcode}}">
+                                </div>
+                                <div class="col-md-12 form-group d-flex align-items-center justify-content-center">
+                                    <button class="btn btn-lg btn-primary font-weight-bold my-3 py-3" type="submit">Update Account</button>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                </div>
+        </div>
+    </div>
+    <!-- Shop End -->
+{% endblock body %}

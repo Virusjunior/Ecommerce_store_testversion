@@ -1,0 +1,40 @@
+from django.urls import path,include
+from .import views
+from django.conf import settings
+from django.conf.urls.static import static
+urlpatterns = [
+    path('', views.index, name = 'index'),
+    path('shop', views.shop, name = 'shop'),
+    path('shop/<slug:data>', views.shop, name = 'shopdata'),
+    path('detail/<str:id>', views.detail, name = 'detail'),
+    path('men', views.men, name = 'men'),
+    path('women', views.women, name = 'women'),
+    path('baby', views.baby, name = 'baby'),
+    path('review/<str:id>', views.review, name = 'review'),
+    path('delete_review/<str:id>', views.delete_review, name = 'delete_review'),
+    path('update_review/<str:id>', views.update_review, name = 'update_review'),
+    path('add-to-cart', views.addtocart, name = 'add-to-cart'),
+    path('increase/<int:product_id>/', views.decrease_quantity, name='decrease_quantity'),
+    path('decrease/<int:product_id>/', views.increase_quantity, name='increase_quantity'),
+    path('delete/<int:id>/', views.delete, name='delete_from_cart'),
+    path('cart', views.showcart, name = 'showcart'),
+    # path('check_cart_discount', views.check_cart_discount, name = 'check_cart_discount'),
+    path('cart-checkout', views.checkout, name = 'checkout'),
+    path('customer', views.customer, name = 'customer'),
+    path('delete_customer/<str:id>/', views.delete_customer, name = 'delete_customer'),
+    path('update_customer/<str:id>/', views.update_customer, name = 'update_customer'),
+    
+    path('profile', views.profile, name = 'profile'),
+    path('paymentdone', views.paymentdone, name = 'paymentdone'),
+    path('orders', views.order, name = 'orders'),
+    path('contact', views.contact, name = 'contact'),
+    path('login', views.loginuser, name = 'login'),
+    path('login/<str:token>/', views.login_with_token, name='login_with_token'),
+    path('register', views.register, name = 'register'),
+    path('logout', views.logoutuser, name = 'logout'),
+    path('activate', views.send_confirmation_email, name = 'activate'),
+    path('add_to_favorite/<str:id>', views.add_to_favorite, name = 'add_to_favorite'),
+    path('delete_favorite/<str:id>', views.delete_favorite, name = 'delete_favorite'),
+    path('favorites', views.show_favorite, name = 'show_favorite'),
+    path('search', views.home_search_view, name = 'home_search_view'),
+]
